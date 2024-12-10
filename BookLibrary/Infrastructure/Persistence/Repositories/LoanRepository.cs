@@ -1,6 +1,8 @@
 using Application.Common.Interfaces.Queries;
 using Application.Common.Interfaces.Repositories;
+using Domain.Books;
 using Domain.Loans;
+using Domain.Readers;
 using Microsoft.EntityFrameworkCore;
 using Optional;
 
@@ -22,6 +24,17 @@ public class LoanRepository(ApplicationDbContext context) : ILoanRepository, ILo
         return await context.Loans
             .AsNoTracking()
             .ToListAsync(cancellationToken);
+    }
+    
+    public async Task<Option<Loan>> GetByReaderAndBook(ReaderId readerId, BookId bookId, CancellationToken cancellationToken)
+    {
+        var entity = await context.Loans
+            .AsNoTracking()
+            .FirstOrDefaultAsync(
+                l => l.ReaderId == readerId && l.BookId == bookId,
+                cancellationToken);
+
+        return entity == null ? Option.None<Loan>() : Option.Some(entity);
     }
 
     public async Task<Loan> Add(Loan loan, CancellationToken cancellationToken)
