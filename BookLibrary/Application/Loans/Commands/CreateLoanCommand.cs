@@ -11,9 +11,9 @@ namespace Application.Loans.Commands;
 
 public record CreateLoanCommand : IRequest<Result<Loan, LoanException>>
 {
-    public required ReaderId ReaderId { get; init; }
-    public required BookId BookId { get; init; }
-    public required LibrarianId LibrarianId { get; init; }
+    public required Guid ReaderId { get; init; }
+    public required Guid BookId { get; init; }
+    public required Guid LibrarianId { get; init; }
     public required DateTime LoanDate { get; init; }
     public required DateTime ReturnDate { get; init; }
 }
@@ -28,11 +28,15 @@ public class CreateLoanCommandHandler : IRequestHandler<CreateLoanCommand, Resul
 
     public async Task<Result<Loan, LoanException>> Handle(CreateLoanCommand request, CancellationToken cancellationToken)
     {
-        var existingLoan = await loanRepository.GetByReaderAndBook(request.ReaderId, request.BookId, cancellationToken);
+        var readerId = new ReaderId(request.ReaderId);
+        var bookId = new BookId(request.BookId);
+        var librarianId = new LibrarianId(request.LibrarianId);
+        
+        var existingLoan = await loanRepository.GetByReaderAndBook(readerId, bookId, cancellationToken);
 
         return await existingLoan.Match<Task<Result<Loan, LoanException>>>(
             loan => Task.FromResult<Result<Loan, LoanException>>(new LoanAlreadyExistsException(loan.Id)),
-            async () => await CreateEntity(request.ReaderId, request.BookId, request.LibrarianId, request.LoanDate, request.ReturnDate, cancellationToken)
+            async () => await CreateEntity(readerId, bookId, librarianId, request.LoanDate, request.ReturnDate, cancellationToken)
         );
     }
 

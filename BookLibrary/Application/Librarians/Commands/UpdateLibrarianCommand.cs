@@ -8,7 +8,7 @@ namespace Application.Librarians.Commands;
 
 public record UpdateLibrarianCommand : IRequest<Result<Librarian, LibrarianException>>
 {
-    public required LibrarianId LibrarianId { get; init; }
+    public required Guid LibrarianId { get; init; }
     public required string FirstName { get; init; }
     public required string LastName { get; init; }
     public required string TelephoneNumber { get; init; }
@@ -24,7 +24,9 @@ public class UpdateLibrarianCommandHandler : IRequestHandler<UpdateLibrarianComm
 
     public async Task<Result<Librarian, LibrarianException>> Handle(UpdateLibrarianCommand request, CancellationToken cancellationToken)
     {
-        var existingLibrarian = await librarianRepository.GetById(request.LibrarianId, cancellationToken);
+        var librarianId = new LibrarianId(request.LibrarianId);
+        
+        var existingLibrarian = await librarianRepository.GetById(librarianId, cancellationToken);
 
         return await existingLibrarian.Match<Task<Result<Librarian, LibrarianException>>>(
             async librarian =>
@@ -32,7 +34,7 @@ public class UpdateLibrarianCommandHandler : IRequestHandler<UpdateLibrarianComm
                 librarian.UpdateDetails(request.FirstName, request.LastName, request.TelephoneNumber);
                 return await librarianRepository.Update(librarian, cancellationToken);
             },
-            () => Task.FromResult<Result<Librarian, LibrarianException>>(new LibrarianNotFoundException(request.LibrarianId))
+            () => Task.FromResult<Result<Librarian, LibrarianException>>(new LibrarianNotFoundException(librarianId))
         );
     }
 }

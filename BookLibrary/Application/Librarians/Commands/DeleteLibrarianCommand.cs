@@ -8,7 +8,7 @@ namespace Application.Librarians.Commands;
 
 public record DeleteLibrarianCommand : IRequest<Result<Librarian, LibrarianException>>
 {
-    public required LibrarianId LibrarianId { get; init; }
+    public required Guid LibrarianId { get; init; }
 }
 public class DeleteLibrarianCommandHandler : IRequestHandler<DeleteLibrarianCommand, Result<Librarian, LibrarianException>>
 {
@@ -21,7 +21,9 @@ public class DeleteLibrarianCommandHandler : IRequestHandler<DeleteLibrarianComm
 
     public async Task<Result<Librarian, LibrarianException>> Handle(DeleteLibrarianCommand request, CancellationToken cancellationToken)
     {
-        var existingLibrarian = await librarianRepository.GetById(request.LibrarianId, cancellationToken);
+        var librarianId = new LibrarianId(request.LibrarianId);
+        
+        var existingLibrarian = await librarianRepository.GetById(librarianId, cancellationToken);
 
         return await existingLibrarian.Match<Task<Result<Librarian, LibrarianException>>>(
             async librarian =>
@@ -35,7 +37,7 @@ public class DeleteLibrarianCommandHandler : IRequestHandler<DeleteLibrarianComm
                     return new LibrarianUnknownException(librarian.Id, ex);
                 }
             },
-            () => Task.FromResult<Result<Librarian, LibrarianException>>(new LibrarianNotFoundException(request.LibrarianId))
+            () => Task.FromResult<Result<Librarian, LibrarianException>>(new LibrarianNotFoundException(librarianId))
         );
     }
 }
