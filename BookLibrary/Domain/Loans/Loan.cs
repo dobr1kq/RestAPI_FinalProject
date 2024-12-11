@@ -23,7 +23,7 @@ public class Loan
         ReturnDate = returnDate;
     }
 
-    public static Loan Create(LoanId id, ReaderId readerId, BookId bookId, LibrarianId librarianId, DateTime loanDate, DateTime returnDate)
+    public static Loan New(LoanId id, ReaderId readerId, BookId bookId, LibrarianId librarianId, DateTime loanDate, DateTime returnDate)
     {
         return new Loan(id, readerId, bookId, librarianId, loanDate, returnDate);
     }

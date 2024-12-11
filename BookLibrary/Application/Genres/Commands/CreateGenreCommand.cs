@@ -35,7 +35,7 @@ public class CreateGenreCommandHandler : IRequestHandler<CreateGenreCommand, Res
         try
         {
             var genreId = GenreId.New();
-            var genre = Genre.Create(genreId, genreName);    
+            var genre = Genre.New(genreId, genreName);    
             return await genreRepository.Add(genre, cancellationToken);
         }
         catch (Exception ex)

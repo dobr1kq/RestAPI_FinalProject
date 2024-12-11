@@ -37,7 +37,7 @@ public class CreateReaderCommandHandler : IRequestHandler<CreateReaderCommand, R
         try
         {
             var readerId = ReaderId.New();
-            var reader = Reader.Create(readerId, firstName, lastName, telephoneNumber);
+            var reader = Reader.New(readerId, firstName, lastName, telephoneNumber);
             return await readerRepository.Add(reader, cancellationToken);
         }
         catch (Exception ex)

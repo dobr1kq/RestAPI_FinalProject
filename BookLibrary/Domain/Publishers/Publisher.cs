@@ -13,7 +13,7 @@ public class Publisher
         PublisherAddress = publisherAddress;
     }
     
-    public static Publisher Create(PublisherId id, string publisherName, string publisherAddress)
+    public static Publisher New(PublisherId id, string publisherName, string publisherAddress)
     {
         return new Publisher(id, publisherName, publisherAddress);
     }

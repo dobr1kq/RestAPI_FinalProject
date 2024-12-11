@@ -15,7 +15,7 @@ public class Reader
         TelephoneNumber = telephoneNumber;
     }
 
-    public static Reader Create(ReaderId id, string firstName, string lastName, string telephoneNumber)
+    public static Reader New(ReaderId id, string firstName, string lastName, string telephoneNumber)
     {
         return new Reader(id, firstName, lastName, telephoneNumber);
     }

@@ -45,7 +45,7 @@ public class CreateLoanCommandHandler : IRequestHandler<CreateLoanCommand, Resul
         try
         {
             var loanId = LoanId.New();
-            var loan = Loan.Create(loanId, readerId, bookId, librarianId, loanDate, returnDate);
+            var loan = Loan.New(loanId, readerId, bookId, librarianId, loanDate, returnDate);
 
             return await loanRepository.Add(loan, cancellationToken);
         }

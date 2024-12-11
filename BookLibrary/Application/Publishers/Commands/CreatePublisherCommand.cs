@@ -35,7 +35,7 @@ public class CreatePublisherCommandHandler : IRequestHandler<CreatePublisherComm
         try
         {
             var publisherId = PublisherId.New();
-            var publisher = Publisher.Create(publisherId, name, address);
+            var publisher = Publisher.New(publisherId, name, address);
             return await publisherRepository.Add(publisher, cancellationToken);
         }
         catch (Exception ex)

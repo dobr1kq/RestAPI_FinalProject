@@ -11,7 +11,7 @@ public class Genre
         GenreName = genreName;
     }
     
-    public static Genre Create(GenreId id, string genreName)
+    public static Genre New(GenreId id, string genreName)
     {
         return new Genre(id, genreName);
     }
