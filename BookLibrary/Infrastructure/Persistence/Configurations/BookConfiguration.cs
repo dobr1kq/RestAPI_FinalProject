@@ -1,4 +1,7 @@
+using Domain.Authors;
 using Domain.Books;
+using Domain.Genres;
+using Domain.Publishers;
 using Infrastructure.Persistence.Converters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -22,5 +25,18 @@ public class BookConfiguration : IEntityTypeConfiguration<Book>
         builder.Property(x => x.Date)
             .IsRequired()
             .HasConversion(new DateTimeUtcConverter());
+
+        builder.Property(x => x.GenreId)
+            .IsRequired()
+            .HasConversion(x => x.Value, x => new GenreId(x));
+
+        builder.Property(x => x.AuthorId)
+            .IsRequired()
+            .HasConversion(x => x.Value, x => new AuthorId(x));
+        
+        builder.Property(x => x.PublisherId)
+            .IsRequired()
+            .HasConversion(x => x.Value, x => new PublisherId(x));
     }
 }
+

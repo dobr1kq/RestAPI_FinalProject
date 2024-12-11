@@ -35,7 +35,10 @@ public class BooksController(ISender sender, IBookQueries bookQueries) : Control
         var input = new CreateBookCommand
         {
             Name = request.Name,
-            Date = request.Date
+            Date = request.Date,
+            AuthorId = request.AuthorId,
+            GenreId = request.GenreId,
+            PublisherId = request.PublisherId
         };
 
         var result = await sender.Send(input, cancellationToken);
@@ -52,7 +55,10 @@ public class BooksController(ISender sender, IBookQueries bookQueries) : Control
         {
             BookId = request.Id,
             Name = request.Name,
-            Date = request.Date
+            Date = request.Date,
+            AuthorId = request.AuthorId,
+            GenreId = request.GenreId,
+            PublisherId = request.PublisherId
         };
 
         var result = await sender.Send(input, cancellationToken);
